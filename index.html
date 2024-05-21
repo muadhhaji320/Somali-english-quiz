@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Somali to English Quiz</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #quizContainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    #somaliSentence {
+      width: 100%;
+      height: auto;
+      padding: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      resize: none;
+      overflow: auto;
+      background-color: #e1f5fe;
+      border: none;
+    }
+    #submitBtn,
+    #startBtn {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #submitBtn:hover,
+    #startBtn:hover {
+      background-color: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    .completed {
+      background-color: #f5f5f5;
+    }
+
+    /* Media Queries */
+    @media screen and (max-width: 600px) {
+      #quizContainer {
+        padding: 10px;
+      }
+      #somaliSentence {
+        font-size: 14px;
+      }
+      #submitBtn,
+      #startBtn {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Somali to English Quiz</h1>
+  
+  <div id="quizContainer">
+    <p>Translate the following Somali sentence into English:</p>
+    <textarea id="somaliSentence" readonly>Enter the Somali sentence here</textarea>
+    <label for="translation">Your Answer:</label>
+    <input type="text" id="translation">
+    <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+    <p id="result"></p>
+  </div>
+  
+  <div id="resultContainer" style="display: none;">
+    <p id="finalScore"></p>
+    <button id="startBtn" onclick="startQuiz()">Start Again</button>
+  </div>
+
+  <script>
+    const sentences = [
+      {
+        somali: "xld kawaran",
+        english: "How are you doing"
+      },
+      {
+        somali: "Magacaa",
+        english: "What's your name"
+      },
+      {
+        somali: "Mahadsanid",
+        english: "Thank you"
+      },
+      {
+        somali: "Nabadgelyo",
+        english: "Peace"
+      },
+      // Add more Somali sentences and their English translations here
+    ];
+
+    let currentIndex = -1;
+    let score = 0;
+
+    function loadNextSentence() {
+      currentIndex++;
+      if (currentIndex < sentences.length) {
+        const sentence = sentences[currentIndex];
+        document.getElementById('somaliSentence').textContent = sentence.somali;
+        document.getElementById('translation').value = '';
+        document.getElementById('result').textContent = '';
+        document.getElementById('submitBtn').disabled = false;
+      } else {
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('finalScore').textContent = `You scored ${score}/${sentences.length}.`;
+      }
+    }
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById('translation').value.trim().toLowerCase();
+      const sentence = sentences[currentIndex];
+
+      if (userAnswer === sentence.english.toLowerCase()) {
+        score++;
+        document.getElementById('result').textContent = 'Correct!';
+        document.getElementById('result').classList.add('correct');
+      } else {
+        document.getElementById('result').textContent = `Incorrect. The correct answer is: ${sentence.english}`;
+        document.getElementById('result').classList.add('incorrect');
+      }
+
+      document.getElementById('submitBtn').disabled = true;
+      setTimeout(loadNextSentence, 2500); // Delay of 2.5 seconds (2500 milliseconds)
+    }
+
+    function startQuiz() {
+      currentIndex = -1;
+      score = 0;
+      loadNextSentence();
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('resultContainer').style.display = 'none';
+    }
+
+    startQuiz(); // Automatically start the quiz when the page loads
+  </script>
+</body>
+</html>
